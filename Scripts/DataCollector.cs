@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class DataCollector : MonoBehaviour
 {
-    public Transform characterCamera;
+    public Transform head;
+    public Transform leftHand;
+    public Transform rightHand;
     public int interval = 10;
 
     private string _path;
@@ -26,7 +28,7 @@ public class DataCollector : MonoBehaviour
         {
             _dataPoints = new List<DataPoint>();
         }
-        
+
         // Call the function Record() repeatedly starting after 0 seconds and with the specified interval
         InvokeRepeating(nameof(Record), 0, interval);
     }
@@ -47,7 +49,7 @@ public class DataCollector : MonoBehaviour
     }
 
     // Before the application quits format the data points into JSON format and save them to a file
-    
+
     // If the app is ran on Quest/Android change the function to "OnApplicationPause" instead of "OnApplicationQuit"
     // private void OnApplicationPause(bool pauseStatus)
     // {
@@ -69,11 +71,7 @@ public class DataCollector : MonoBehaviour
 
     private void Record()
     {
-        _dataPoints.Add(new DataPointTransform(
-            characterCamera.position,
-            characterCamera.rotation.eulerAngles,
-            characterCamera.forward)
-        );
+        _dataPoints.Add(new DataPointAvatar(head, leftHand, rightHand));
     }
 
     // Public record function so it can be called from outside this script
@@ -98,20 +96,6 @@ internal class DataPoint
     }
 }
 
-internal class DataPointTransform : DataPoint
-{
-    public Vector3 Position;
-    public Vector3 Rotation;
-    public Vector3 Forward;
-
-    public DataPointTransform(Vector3 position, Vector3 rotation, Vector3 forward)
-    {
-        Position = position;
-        Rotation = rotation;
-        Forward = forward;
-    }
-}
-
 internal class DataPointMessage : DataPoint
 {
     public string Message;
@@ -119,5 +103,49 @@ internal class DataPointMessage : DataPoint
     public DataPointMessage(string message)
     {
         Message = message;
+    }
+}
+
+internal class DataPointTransform : DataPoint
+{
+    public Vector3 Position;
+    public Vector3 Rotation;
+    public Vector3 Forward;
+
+    public DataPointTransform(Transform gameObject)
+    {
+        Position = gameObject.position;
+        Rotation = gameObject.rotation.eulerAngles;
+        Forward = gameObject.forward;
+    }
+}
+
+internal class DataPointAvatar : DataPoint
+{
+    public Vector3 Position;
+    public Vector3 Rotation;
+    public Vector3 Forward;
+
+    public Vector3 LeftHandPosition;
+    public Vector3 LeftHandRotation;
+    public Vector3 LeftHandForward;
+
+    public Vector3 RightHandPosition;
+    public Vector3 RightHandRotation;
+    public Vector3 RightHandForward;
+
+    public DataPointAvatar(Transform head, Transform leftHand, Transform rightHand)
+    {
+        Position = head.position;
+        Rotation = head.rotation.eulerAngles;
+        Forward = head.forward;
+
+        LeftHandPosition = leftHand.position;
+        LeftHandRotation = leftHand.rotation.eulerAngles;
+        LeftHandForward = leftHand.forward;
+
+        RightHandPosition = rightHand.position;
+        RightHandRotation = rightHand.rotation.eulerAngles;
+        RightHandForward = rightHand.forward;
     }
 }
