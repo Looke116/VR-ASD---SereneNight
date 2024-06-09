@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4791623596384131471}
   - component: {fileID: 5683466737522782893}
   - component: {fileID: 1554725871646456741}
+  - component: {fileID: 5873048468456727169}
   m_Layer: 0
   m_Name: Card Display
   m_TagString: Untagged
@@ -84,6 +85,8 @@ MonoBehaviour:
   _components:
   - componentID: 1
     component: {fileID: 1554725871646456741}
+  - componentID: 2
+    component: {fileID: 5873048468456727169}
   _childViews: []
 --- !u!114 &1554725871646456741
 MonoBehaviour:
@@ -103,6 +106,18 @@ MonoBehaviour:
   _syncScale: 0
   _syncVelocity: 1
   _maintainOwnershipWhileSleeping: 0
+--- !u!114 &5873048468456727169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4791623596384131464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b72acaf801c37e94eb6bddc9475439c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4791623597453717130
 GameObject:
   m_ObjectHideFlags: 0

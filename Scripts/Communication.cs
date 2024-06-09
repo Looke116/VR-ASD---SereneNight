@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Normal.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit.UI;
 
 public class Communication : MonoBehaviour
 {
@@ -38,16 +36,12 @@ public class Communication : MonoBehaviour
             useInstance = realtime
         };
 
-        var cardDisplay = Realtime.Instantiate("Prefabs/Card Display", options);
-        
-        cardDisplay.transform.position =
-            Camera.main.transform.position + Camera.main.transform.forward
-                                           + new Vector3(0, 0.2f, 0);
+        var pos = Camera.main.transform.position + Camera.main.transform.forward + new Vector3(0, 0.2f, 0);
+        var rot = new Quaternion();
+        var cardDisplay = Realtime.Instantiate("Prefabs/Card Display", pos, rot, options);
 
-        var image = cardDisplay.GetComponentInChildren<Image>();
-        image.overrideSprite = Resources.Load<Sprite>($"Images/{card}");
-
-        cardDisplay.GetComponent<LazyFollow>().target = Camera.main.transform;
+        var model = cardDisplay.GetComponent<CardDisplay>();
+        model.SetSprite($"Images/{card}");
 
         displays.Enqueue(cardDisplay);
 
