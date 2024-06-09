@@ -57,7 +57,10 @@ public class PersonalSpace : MonoBehaviour
         // Declared local function 
         void Toggle(InputAction.CallbackContext obj)
         {
-            _isEnabled = !_isEnabled;
+            if (realtimeView.isOwnedLocallyInHierarchy)
+            {
+                _isEnabled = !_isEnabled;
+            }
         }
     }
 

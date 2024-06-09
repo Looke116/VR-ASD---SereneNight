@@ -12,22 +12,25 @@ public class DataCollector : MonoBehaviour
     public int interval = 10;
 
     private string _path;
-    private StreamWriter _writer;
     private StringBuilder _stringBuilder;
+    private static StreamWriter _writer;
     private static List<DataPoint> _dataPoints;
 
     private void Awake()
     {
         // Initialize variables
-        _path = Application.persistentDataPath + "/player " + DateTime.Now.ToString("yyyy-M-d HH-mm") + ".json";
-        // _path = Application.persistentDataPath + "/player.json";
-        _writer = new StreamWriter(_path);
+        if (_writer == null)
+        {
+            _path = Application.persistentDataPath + "/player " + DateTime.Now.ToString("yyyy-M-d HH-mm") + ".json";
+            // _path = Application.persistentDataPath + "/player.json";
+            _writer = new StreamWriter(_path);
+        }
+
         _stringBuilder = new StringBuilder();
 
         if (_dataPoints == null)
-        {
             _dataPoints = new List<DataPoint>();
-        }
+        
 
         // Call the function Record() repeatedly starting after 0 seconds and with the specified interval
         InvokeRepeating(nameof(Record), 0, interval);
@@ -49,8 +52,8 @@ public class DataCollector : MonoBehaviour
     }
 
     // Before the application quits format the data points into JSON format and save them to a file
-
     // If the app is ran on Quest/Android change the function to "OnApplicationPause" instead of "OnApplicationQuit"
+    //
     // private void OnApplicationPause(bool pauseStatus)
     // {
     //     if (!pauseStatus) return;
@@ -77,7 +80,7 @@ public class DataCollector : MonoBehaviour
     // Public record function so it can be called from outside this script
     public void Record(String message)
     {
-        // _dataPoints.Add(new DataPointMessage(message));
+        _dataPoints.Add(new DataPointMessage(message));
     }
 }
 

@@ -18,14 +18,16 @@ public class Communication : MonoBehaviour
 
     public void ButtonPressed(String card)
     {
-        dataCollector.Record($"Player pressed the {card} button");
+        dataCollector.Record($"Player pressed the \"{card}\" button");
 
-        if (card.Equals("home"))
+        if (card.Equals("Acasa") && !SceneManager.GetActiveScene().name.Equals("Starting Room"))
         {
+            dataCollector.Record("Changing scene: Safe Space");
             SceneManager.LoadScene("Starting Room");
         }
-        else if (card.Equals("forest"))
+        else if (card.Equals("Padure") && !SceneManager.GetActiveScene().name.Equals("Forest Multiplayer"))
         {
+            dataCollector.Record("Changing scene: Forest");
             SceneManager.LoadScene("Forest Multiplayer");
         }
 
