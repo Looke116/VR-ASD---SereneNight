@@ -125,9 +125,9 @@ internal class DataPointTransform : DataPoint
 
 internal class DataPointAvatar : DataPoint
 {
-    public Vector3 Position;
-    public Vector3 Rotation;
-    public Vector3 Forward;
+    public Vector3 HeadPosition;
+    public Vector3 HeadRotation;
+    public Vector3 HeadForward;
 
     public Vector3 LeftHandPosition;
     public Vector3 LeftHandRotation;
@@ -139,9 +139,9 @@ internal class DataPointAvatar : DataPoint
 
     public DataPointAvatar(Transform head, Transform leftHand, Transform rightHand)
     {
-        Position = head.position;
-        Rotation = head.rotation.eulerAngles;
-        Forward = head.forward;
+        HeadPosition = head.position;
+        HeadRotation = head.rotation.eulerAngles;
+        HeadForward = head.forward;
 
         LeftHandPosition = leftHand.position;
         LeftHandRotation = leftHand.rotation.eulerAngles;

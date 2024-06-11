@@ -1,8 +1,8 @@
 using System;
-using Normal.Realtime;
 using TMPro;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -11,22 +11,20 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class VolumeChange : MonoBehaviour
 {
     public GameObject canvasPrefab;
-    // public RealtimeAvatarManager avatarManager;    
-    public GameObject _leftController;
-
-
+    public GameObject leftController;
+    
     private GameObject _canvas;
     // private GameObject _leftController;
-    private GameObject _rightController;
+    // private GameObject _rightController;
     private NearFarInteractor _leftInteractor;
     private NearFarInteractor _rightInteractor;
 
     private void Start()
     {
         // avatarManager.avatarCreated += SetUpListners;
-        
-        _leftInteractor = _leftController.GetComponentInChildren<NearFarInteractor>();
-        
+
+        _leftInteractor = leftController.GetComponentInChildren<NearFarInteractor>();
+
         _leftInteractor.selectEntered.AddListener(CreateCanvas);
         _leftInteractor.selectExited.AddListener(DeleteCanvas);
     }
@@ -71,7 +69,7 @@ public class VolumeChange : MonoBehaviour
 
         // Update the UI with the relevant information
         _canvas.transform.position =
-            _leftController.transform.position + Camera.main.transform.forward - new Vector3(0, 0.2f, 0);
+            leftController.transform.position + Camera.main.transform.forward - new Vector3(0, 0.2f, 0);
         label.text = selectedObject.name;
         ChangeVolume(audioSource, audioSource.volume, valueDisplay);
 
