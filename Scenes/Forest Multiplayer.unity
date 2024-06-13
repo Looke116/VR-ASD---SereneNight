@@ -9808,11 +9808,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1670256625, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
   m_PrefabInstance: {fileID: 701261580}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1719455823 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 202364687, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
-  m_PrefabInstance: {fileID: 701261580}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1777917447
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10409,7 +10404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasPrefab: {fileID: 3182027164373771898, guid: f6665416b1c7d4c47b40b42bdb9b2207, type: 3}
-  _leftController: {fileID: 1719455823}
+  leftController: {fileID: 0}
 --- !u!4 &1957411327
 Transform:
   m_ObjectHideFlags: 0

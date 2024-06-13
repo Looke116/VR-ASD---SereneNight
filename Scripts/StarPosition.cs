@@ -57,15 +57,13 @@ namespace stardata
         {
             return Rev(ComputeLST(year, month, day, hour, longitude) - ra);
         }
-
     }
 
     public class Star
     {
         string name;
-        float ra, dec, azimuth, altitude, visualMagnitude, distance, x, y, z;
-
-        public Star(string name, float ra, float dec, float altitude, float azimuth, float visualMagnitude, float distance, float x, float y, float z)
+        float ra, dec, azimuth, altitude, visualMagnitude, distance, x, y, z, r, g, b;
+        public Star(string name, float ra, float dec, float altitude, float azimuth, float visualMagnitude, float distance, float x, float y, float z, float r, float g, float b)
         {
             this.name = name;
             this.ra = ra;
@@ -77,6 +75,14 @@ namespace stardata
             this.x = x;
             this.y = y;
             this.z = z;
+            this.r = r;
+            this.g = g;
+            this.b = b;
+        }
+
+        public bool isVisible()
+        {
+            return this.altitude > 0 ? true : false;
         }
 
         public void setAzimuth(float azimuth)
@@ -153,36 +159,65 @@ namespace stardata
         {
             this.z = z;
         }
+
+        public float getR()
+        {
+            return this.r;
+        }
+
+        public float getG()
+        {
+            return this.g;
+        }
+
+        public float getB()
+        {
+            return this.b;
+        }
     }
 
     public static class Stars
     {
         private static List<Star> stars = new List<Star>();
 
-        public static void addStar(string name, float ra, float dec, float altitude, float azimuth, float visualMagnitude, float distance, float x, float y, float z)
+        public static void addStar(string name, float ra, float dec, float altitude, float azimuth, float visualMagnitude, float distance, float x, float y, float z, float r, float g, float b)
         {
-            stars.Add(new Star(name, ra, dec, altitude, azimuth, visualMagnitude, distance, x, y, z));
+            stars.Add(new Star(name, ra, dec, altitude, azimuth, visualMagnitude, distance, x, y, z, r, g, b));
         }
 
         public static Star GetStar(int index)
         {
-            return stars[index];
+            return (index < stars.Count)?stars[index]:null;
         }
 
         public static void UpdateStar(int index, float altitude, float azimuth, float x, float y, float z)
         {
-//            Debug.Log(index + " " + stars[index].getAltitude() + " " + stars[index].getAzimuth());
             stars[index].setAltitude(altitude);
             stars[index].setAzimuth(azimuth);
             stars[index].setX(x);
             stars[index].setY(y);
             stars[index].setZ(z);
-            //           Debug.Log(index + " " + stars[index].getAltitude() + " " + stars[index].getAzimuth());
         }
 
         public static int getNumberOfStars()
         {
             return stars.Count;
+        }
+
+        static int noVisibleStars = 0;
+        public static void incrementVisibleStars()
+        {
+            noVisibleStars++;
+        }
+
+        public static void resetNumberVisibleStars()
+        {
+            noVisibleStars = 0;
+        }
+
+        public static int getNumberVisibleStars()
+        {
+            return noVisibleStars;
         }
 
         public static float getVisualMagnitudeAfterExtinction(int index)
