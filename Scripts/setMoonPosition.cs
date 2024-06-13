@@ -25,18 +25,28 @@ public class setMoonPosition : MonoBehaviour
         longitude = xrTime.getLongitude();
     }
 
+    float crtLat, crtLon;
+    DateTime crtTime, newTime;
     // Update is called once per frame
     DateTime time;
-    void Update()
+     public void LateUpdate()
     {
-        UpdateMoonPosition();
+        newTime = xrTime.getTime();
+        // only update when the lat/lon have changed
+        if (crtLat != latitude || crtLon != longitude || (Math.Abs((crtTime - newTime).TotalSeconds) > 1))
+        {
+            crtTime = newTime;
+            crtLat = latitude;
+            crtLon = longitude;
+            UpdateMoonPosition();
+        }
     }
     private void UpdateMoonPosition()
     {
         //moonIllumination = MoonCalc.GetMoonIllumination(date);
         //Debug.Log("Moon pos: " + moonPos.Altitude * Mathf.Rad2Deg + " " + (180 + moonPos.Azimuth * Mathf.Rad2Deg) + " " + date.ToString());
         //Debug.Log("Moon illumination: " + moonIllumination.Phase);
-        time = xrTime.getTime();
+        // time = xrTime.getTime();
 
         moonPos = MoonCalc.GetMoonPosition(xrTime.getTime(), latitude, longitude);
         transform.eulerAngles = (new Vector3((float)(moonPos.Altitude) * Mathf.Rad2Deg, 180 + (float)moonPos.Azimuth * Mathf.Rad2Deg, 0));

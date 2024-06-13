@@ -8,16 +8,11 @@ using UnityEngine.UI;
 
 public class setSunPosition : MonoBehaviour
 {
-    [SerializeField] int hour = DateTime.Now.Hour;
-    [SerializeField] int minute = DateTime.Now.Minute;
     [SerializeField] private Transform stars;
-    [SerializeField] Material daySkybox;
-    [SerializeField] Material nightSkybox;
-
-    // set the main camera in the inspector
-    [SerializeField] public Camera MainCamera;
 
     [SerializeField] public GameObject timeGameObject;
+
+    [SerializeField] public GameObject meteor;
 
     private XRTime xrTime;
     private float latitude;
@@ -25,28 +20,72 @@ public class setSunPosition : MonoBehaviour
 
     DateTime time;
     SunPosition sunPos;
+    ParticleSystem starParticles;
+
     // Start is called before the first frame update
     void Start()
     {
+        if (meteor != null)
+        {
+            meteor.SetActive(false);
+        }
 		xrTime = timeGameObject.GetComponent<XRTime>();
         latitude = xrTime.getLatitude();
         longitude = xrTime.getLongitude();
+        starParticles = stars.GetComponent<ParticleSystem>();
     }
 
-    // Update is called once per frame
-    void Update()
+    float crtLat, crtLon;
+    DateTime crtTime, newTime;
+    private float updateInterval = 1f / 30f; // Interval for 30 FPS
+    private float lastUpdateTime = 0f;
+
+    void LateUpdate()
     {
-        UpdateSunPosition();
+        newTime = xrTime.getTime();
+
+        // Check if enough time has passed t o update
+        if (Time.time - lastUpdateTime >= updateInterval)
+        {
+            // only update when the lat/lon have changed or enough time has passed
+            if (crtLat != latitude || crtLon != longitude || (Math.Abs((newTime - crtTime).TotalSeconds) > 1))
+            {
+                UpdateSunPosition();
+                crtTime = newTime;
+                crtLat = latitude;
+                crtLon = longitude;
+            }
+            lastUpdateTime = Time.time;
+        }
     }
 
     ParticleSystem.Particle[] particles;
     float fadeStarsValue;
-    float z;
+    Star star;
+    bool firstPass = true;
+    MainModule main;
     private void UpdateSunPosition()
     {
         time = xrTime.getTime();
 
         sunPos = SunCalc.GetSunPosition(time, latitude, longitude);
+
+        if (sunPos.Altitude < 0) // remove Terrain from culling mask (lights do not affect the environment)
+        {
+            GetComponent<Light>().cullingMask &= ~(1 << LayerMask.NameToLayer("Terrain"));
+            GetComponent<Light>().cullingMask &= ~(1 << LayerMask.NameToLayer("Player"));
+
+            if (meteor != null)
+            {
+                meteor.SetActive(true);
+            }
+        }
+        else // add Terrain to culling mask (lights affect the envrionment)
+        {
+            GetComponent<Light>().cullingMask |= 1 << LayerMask.NameToLayer("Terrain");
+            GetComponent<Light>().cullingMask |= 1 << LayerMask.NameToLayer("Player");
+
+        }
 
         transform.eulerAngles = new Vector3((float)(sunPos.Altitude) * Mathf.Rad2Deg, 180 + (float)sunPos.Azimuth * Mathf.Rad2Deg, 0);
 
@@ -64,26 +103,29 @@ public class setSunPosition : MonoBehaviour
             fadeStarsValue = 1f;
         }
 
-        if (particles == null)
-        {
-            particles = new ParticleSystem.Particle[stars.GetComponent<ParticleSystem>().particleCount];
-        }
-
         // Render stars
-        stars.GetComponent<ParticleSystem>().GetParticles(particles);
-        for (int p = 0; p < particles.Length; p++)
+        particles = new ParticleSystem.Particle[Stars.getNumberVisibleStars()];
+        //starParticles.GetParticles(particles);
+        int p = 0;
+        for (int i = 0; i < Stars.getNumberOfStars(); i++)
         {
-            if (p < Stars.getNumberOfStars())
+            if (p >= particles.Length)
+                continue;
+            star = Stars.GetStar(i);
+            if (star.isVisible() || firstPass)
             {
-                particles[p].position = new Vector3(Stars.GetStar(p).getX(), Stars.GetStar(p).getY(), Stars.GetStar(p).getZ());
+                particles[p].position = new Vector3(star.getX(), star.getY(), star.getZ());
                 particles[p].position = particles[p].position.normalized;
                 particles[p].position *= 1500;
 
                 particles[p].startSize = 200 * Mathf.Pow(10, (-1.44f - Stars.getVisualMagnitudeAfterExtinction(p)) / 5);
-
             }
-            particles[p].startColor = new Color(particles[p].startColor.r / 255f, particles[p].startColor.g / 255f, particles[p].startColor.b / 255f, fadeStarsValue);//where a = the alpha
+            particles[p].startColor = new Color(star.getR(), star.getG(), star.getB(), fadeStarsValue * particles[p].startSize /*brighest star become visible first*/);//where a = the alpha
+            p++;
         }
-        stars.GetComponent<ParticleSystem>().SetParticles(particles, particles.Length);
+        firstPass = false;
+        main = starParticles.main;
+        main.maxParticles = particles.Length;
+        starParticles.SetParticles(particles, particles.Length);
     }
 }

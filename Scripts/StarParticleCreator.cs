@@ -44,12 +44,14 @@ public class StarParticleCreator : MonoBehaviour
         crtLat = latitude;
         crtLon = longitude;
         crtTime = xrTime.getTime();
+
+        UpdateStars(newTime, latitude, longitude);
     }
 
     float crtLat, crtLon;
     DateTime crtTime, newTime;
     
-    public void Update()
+    public void LateUpdate()
     {
         newTime = xrTime.getTime();
         // only update when the lat/lon have changed
@@ -62,77 +64,33 @@ public class StarParticleCreator : MonoBehaviour
         }
     }
 
-    ParticleSystem.Particle[] particleStars;
-    private float alt, az, dist;
+    private float alt, az, dist, r, g, b;
     string[] components;
     public void LoadParticles(DateTime time, float latitude, float longitude)
     {
         String[] lines = fileContent.Split('\n');
-        if (particleStars == null)
-        {
-            particleStars = new ParticleSystem.Particle[maxParticles];
-        }
-        particleSystem.GetParticles(particleStars);
 
         for (int i = 1; i < maxParticles; i++) // first line is the header
         {
             components = lines[i].Split(',');
-            /*particleStars[i].position = new Vector3(-float.Parse(components[10], NumberStyles.Any, CultureInfo.InvariantCulture),
-                                                   float.Parse(components[11], NumberStyles.Any, CultureInfo.InvariantCulture),
-                                                    float.Parse(components[12], NumberStyles.Any, CultureInfo.InvariantCulture));
-            particleStars[i].position = particleStars[i].position.normalized;
-            particleStars[i].position *= 1000;// (Camera.main.farClipPlane-1);*/
-
-            /*transform.eulerAngles = new Vector3(StarPosition.getAltitude(float.Parse(components[4], NumberStyles.Any, CultureInfo.InvariantCulture),
-                                                                             float.Parse(components[5], NumberStyles.Any, CultureInfo.InvariantCulture),
-                                                                             51, 0,
-                                                                             DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour),
-                                                    180 + StarPosition.getAzimuth(float.Parse(components[4], NumberStyles.Any, CultureInfo.InvariantCulture),
-                                                                             float.Parse(components[5], NumberStyles.Any, CultureInfo.InvariantCulture),
-                                                                             51, 0,
-                                                                             DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour),
-                                                    0);*/
 
             alt = StarPosition.getAltitude(float.Parse(components[4], NumberStyles.Any, CultureInfo.InvariantCulture) * 15,
                                                                              float.Parse(components[5], NumberStyles.Any, CultureInfo.InvariantCulture),
                                                                              latitude, longitude,
                                                                              time) * Mathf.Deg2Rad;
-
-            // added 90 to align it with the north of the scene
-            az = (StarPosition.getAzimuth(float.Parse(components[4], NumberStyles.Any, CultureInfo.InvariantCulture) * 15,
+            az = StarPosition.getAzimuth(float.Parse(components[4], NumberStyles.Any, CultureInfo.InvariantCulture) * 15,
                                                                              float.Parse(components[5], NumberStyles.Any, CultureInfo.InvariantCulture),
                                                                              latitude, longitude,
-                                                                             time) + 90) * Mathf.Deg2Rad;
+                                                                             time) * Mathf.Deg2Rad;
             dist = float.Parse(components[6], NumberStyles.Any, CultureInfo.InvariantCulture);
             //  https://math.stackexchange.com/questions/15323/how-do-i-calculate-the-cartesian-coordinates-of-stars
-            particleStars[i].position = new Vector3(dist * Mathf.Cos(alt) * Mathf.Cos(az),
-                                                    dist * Mathf.Cos(alt) * Mathf.Sin(az),
-                                                    dist * Mathf.Sin(alt)
-                                                    );
-            particleStars[i].position = particleStars[i].position.normalized;
-            particleStars[i].position *= 1500;
-
-            particleStars[i].remainingLifetime = Mathf.Infinity;
-
-            Stars.addStar(components[3].Trim() == "" ? components[0] : components[3], 
-                            float.Parse(components[4]), 
-                            float.Parse(components[5]), 
-                            alt * Mathf.Rad2Deg, 
-                            az * Mathf.Rad2Deg, 
-                            float.Parse(components[7]), 
-                            dist,
-                            dist * Mathf.Cos(alt) * Mathf.Cos(az),
-                            dist * Mathf.Cos(alt) * Mathf.Sin(az),
-                             dist * Mathf.Sin(alt)
-                            );
             
-            particleStars[i].startSize = 200 * Mathf.Pow(10, (-1.44f - Stars.getVisualMagnitudeAfterExtinction(i-1)) / 5);
-            //Debug.Log(Stars.GetStar(i - 1).getVisualMagnitude() + " " + Stars.getVisualMagnitudeAfterExtinction(i - 1) + " " + particleStars[i].startSize + " " + Stars.GetStar(i-1).getAltitude());
-
             switch (components[9][0])
             {
                 case 'O':
-                    particleStars[i].startColor = new Color(155f / 255f, 176f / 255f, 255f / 255f);
+                    r = 155f / 255f;
+                    g = 176f / 255f;
+                    b = 255f / 255f;
                     if (components[9].Length < 2)
                     {
                         break;
@@ -140,12 +98,16 @@ public class StarParticleCreator : MonoBehaviour
                     switch (components[9][1])
                     {
                         case '5':
-                            particleStars[i].startColor = new Color(157f / 255f, 180f / 255f, 255f / 255f);
+                            r = 157f / 255f;
+                            g = 180f / 255f;
+                            b = 255f / 255f;
                             break;
                     }
                     break;
                 case 'B':
-                    particleStars[i].startColor = new Color(170f / 255f, 191f / 255f, 255f / 255f);
+                    r = 170f / 255f;
+                    g = 191f / 255f;
+                    b = 255f / 255f;
                     if (components[9].Length < 2)
                     {
                         break;
@@ -153,21 +115,31 @@ public class StarParticleCreator : MonoBehaviour
                     switch (components[9][1])
                     {
                         case '1':
-                            particleStars[i].startColor = new Color(162f / 255f, 185f / 255f, 255f / 255f);
+                            r = 162f / 255f;
+                            g = 185f / 255f;
+                            b = 255f / 255f;
                             break;
                         case '3':
-                            particleStars[i].startColor = new Color(167f / 255f, 188f / 255f, 255f / 255f);
+                            r = 167f / 255f;
+                            g = 188f / 255f;
+                            b = 255f / 255f;
                             break;
                         case '5':
-                            particleStars[i].startColor = new Color(170f / 255f, 191f / 255f, 255f / 255f);
+                            r = 170f / 255f;
+                            g = 191f / 255f;
+                            b = 255f / 255f;
                             break;
                         case '8':
-                            particleStars[i].startColor = new Color(175f / 255f, 195f / 255f, 255f / 255f);
+                            r = 175f / 255f;
+                            g = 195f / 255f;
+                            b = 255f / 255f;
                             break;
                     }
                     break;
                 case 'A':
-                    particleStars[i].startColor = new Color(202f / 255f, 215f / 255f, 255f / 255f);
+                    r = 202f / 255f;
+                    g = 215f / 255f;
+                    b = 255f / 255f;
                     if (components[9].Length < 2)
                     {
                         break;
@@ -175,18 +147,26 @@ public class StarParticleCreator : MonoBehaviour
                     switch (components[9][1])
                     {
                         case '1':
-                            particleStars[i].startColor = new Color(186f / 255f, 204f / 255f, 255f / 255f);
+                            r = 186f / 255f;
+                            g = 204f / 255f;
+                            b = 255f / 255f;
                             break;
                         case '3':
-                            particleStars[i].startColor = new Color(192f / 255f, 209f / 255f, 255f / 255f);
+                            r = 192f / 255f;
+                            g = 209f / 255f;
+                            b = 255f / 255f;
                             break;
                         case '5':
-                            particleStars[i].startColor = new Color(202f / 255f, 216f / 255f, 255f / 255f);
+                            r = 202f / 255f;
+                            g = 216f / 255f;
+                            b = 255f / 255f;
                             break;
                     }
                     break;
                 case 'F':
-                    particleStars[i].startColor = new Color(248f / 255f, 247f / 255f, 255f / 255f);
+                    r = 248f / 255f;
+                    g = 247f / 255f;
+                    b = 255f / 255f;
                     if (components[9].Length < 2)
                     {
                         break;
@@ -194,22 +174,32 @@ public class StarParticleCreator : MonoBehaviour
                     switch (components[9][1])
                     {
                         case '0':
-                            particleStars[i].startColor = new Color(228f / 255f, 232f / 255f, 255f / 255f);
+                            r = 228f / 255f;
+                            g = 232f / 255f;
+                            b = 255f / 255f;
                             break;
                         case '2':
-                            particleStars[i].startColor = new Color(237f / 255f, 238f / 255f, 255f / 255f);
+                            r = 237f / 255f;
+                            g = 238f / 255f;
+                            b = 255f / 255f;
                             break;
                         case '5':
-                            particleStars[i].startColor = new Color(251f / 255f, 248f / 255f, 255f / 255f);
+                            r = 251f / 255f;
+                            g = 248f / 255f;
+                            b = 255f / 255f;
                             break;
                         case '8':
-                            particleStars[i].startColor = new Color(255f / 255f, 249f / 255f, 249f / 255f);
+                            r = 255f / 255f;
+                            g = 249f / 255f;
+                            b = 249f / 255f;
                             break;
                     }
                     break;
 
                 case 'G':
-                    particleStars[i].startColor = new Color(255f / 255f, 244f / 255f, 234f / 255f);
+                    r = 255f / 255f;
+                    g = 244f / 255f;
+                    b = 234f / 255f;
                     if (components[9].Length < 2)
                     {
                         break;
@@ -217,18 +207,26 @@ public class StarParticleCreator : MonoBehaviour
                     switch (components[9][1])
                     {
                         case '2':
-                            particleStars[i].startColor = new Color(255f / 255f, 245f / 255f, 236f / 255f);
+                            r = 255f / 255f;
+                            g = 245f / 255f;
+                            b = 236f / 255f;
                             break;
                         case '5':
-                            particleStars[i].startColor = new Color(255f / 255f, 244f / 255f, 232f / 255f);
+                            r = 255f / 255f;
+                            g = 244f / 255f;
+                            b = 232f / 255f;
                             break;
                         case '8':
-                            particleStars[i].startColor = new Color(255f / 255f, 241f / 255f, 223f / 255f);
+                            r = 255f / 255f;
+                            g = 241f / 255f;
+                            b = 223f / 255f;
                             break;
                     }
                     break;
                 case 'K':
-                    particleStars[i].startColor = new Color(255f / 255f, 210f / 255f, 161f / 255f);
+                    r = 255f / 255f;
+                    g = 210f / 255f;
+                    b = 161f / 255f;
                     if (components[9].Length < 2)
                     {
                         break;
@@ -236,18 +234,26 @@ public class StarParticleCreator : MonoBehaviour
                     switch (components[9][1])
                     {
                         case '0':
-                            particleStars[i].startColor = new Color(255f / 255f, 235f / 255f, 209f / 255f);
+                            r = 255f / 255f;
+                            g = 235f / 255f;
+                            b = 209f / 255f;
                             break;
                         case '4':
-                            particleStars[i].startColor = new Color(255f / 255f, 215f / 255f, 174f / 255f);
+                            r = 255f / 255f;
+                            g = 215f / 255f;
+                            b = 174f / 255f;
                             break;
                         case '7':
-                            particleStars[i].startColor = new Color(255f / 255f, 198f / 255f, 144f / 255f);
+                            r = 255f / 255f;
+                            g = 198f / 255f;
+                            b = 144f / 255f;
                             break;
                     }
                     break;
                 case 'M':
-                    particleStars[i].startColor = new Color(255f / 255f, 204f / 255f, 111f / 255f);
+                    r = 255f / 255f;
+                    g = 204f / 255f;
+                    b = 111f / 255f;
                     if (components[9].Length < 2)
                     {
                         break;
@@ -255,44 +261,52 @@ public class StarParticleCreator : MonoBehaviour
                     switch (components[9][1])
                     {
                         case '2':
-                            particleStars[i].startColor = new Color(255f / 255f, 190f / 255f, 127f / 255f);
+                            r = 255f / 255f;
+                            g = 190f / 255f;
+                            b = 127f / 255f;
                             break;
                         case '4':
                         case '6':
-                            particleStars[i].startColor = new Color(255f / 255f, 187f / 255f, 123f / 255f);
+                            r = 255f / 255f;
+                            g = 187f / 255f;
+                            b = 123f / 255f;
                             break;
                     }
                     break;
             }
-        }
-        particleSystem.SetParticles(particleStars, maxParticles);
- 
+            Stars.addStar(components[3].Trim() == "" ? components[0] : components[3],
+                            float.Parse(components[4]),
+                            float.Parse(components[5]),
+                            alt * Mathf.Rad2Deg,
+                            az * Mathf.Rad2Deg,
+                            float.Parse(components[7]),
+                            dist,
+                            dist * Mathf.Cos(alt) * Mathf.Cos(az),
+                            dist * Mathf.Cos(alt) * Mathf.Sin(az),
+                             dist * Mathf.Sin(alt),
+                             r, g, b
+                            );
+        } 
     }
+
+    Star star;
 
     // particles are drawn in the getSunPosition class
     public void UpdateStars(DateTime time, float latitude, float longitude)
     {
-        /*if (particleStars == null)
-        {
-            particleStars = new ParticleSystem.Particle[GetComponent<ParticleSystem>().particleCount];
-        }
-
-        GetComponent<ParticleSystem>().GetParticles(particleStars);
-        particleSystem.GetParticles(particleStars);
-        */
-
+        Stars.resetNumberVisibleStars();
         for (int i = 1; i < Stars.getNumberOfStars(); i++) // go through each Star and update its position
         {
-            alt = StarPosition.getAltitude(Stars.GetStar(i).getRA() * 15,
-                                                                                 Stars.GetStar(i).getDec(),
+            star = Stars.GetStar(i);
+            alt = StarPosition.getAltitude(star.getRA() * 15,
+                                                                                 star.getDec(),
                                                                                  latitude, longitude,
                                                                                  time) * Mathf.Deg2Rad;
-            // added 90 to align it with the north of the scene
-            az = (StarPosition.getAzimuth(Stars.GetStar(i).getRA() * 15,
-                                                                             Stars.GetStar(i).getDec(),
+            az = (StarPosition.getAzimuth(star.getRA() * 15,
+                                                                             star.getDec(),
                                                                              latitude, longitude,
-                                                                             time) + 90) * Mathf.Deg2Rad;
-            dist = Stars.GetStar(i).getDistance();
+                                                                             time) + 90) * Mathf.Deg2Rad; // +90 to correct for scene orientation
+            dist = star.getDistance();
 
             Stars.UpdateStar(i,
                 alt * Mathf.Rad2Deg,
@@ -301,17 +315,11 @@ public class StarParticleCreator : MonoBehaviour
                             dist * Mathf.Cos(alt) * Mathf.Sin(az),
                              dist * Mathf.Sin(alt));
 
-            /*particleStars[i].position = new Vector3(dist * Mathf.Cos(alt) * Mathf.Cos(az),
-                                        dist * Mathf.Cos(alt) * Mathf.Sin(az),
-                                        dist * Mathf.Sin(alt)
-                                        );
-            particleStars[i].position = particleStars[i].position.normalized;
-            particleStars[i].position *= 1500;
-            */
+            if (star.getAltitude() > 0)
+            {
+                Stars.incrementVisibleStars();
+            }
         }
-
-        //particleSystem.SetParticles(particleStars, maxParticles);
-
     }
 
     String ReadTextFile(string file_path)
