@@ -29,6 +29,7 @@ public class PersonalSpace : MonoBehaviour
         var realtimeView = GetComponent<RealtimeView>();
         if (realtimeView.isOwnedLocallyInHierarchy)
         {
+            realtimeView.RequestOwnershipOfSelfAndChildren();
             var rigCollider = GameObject.Find("XR Origin (XR Rig)").GetComponent<CharacterController>();
             Physics.IgnoreCollision(_personalSpace, rigCollider);
         }

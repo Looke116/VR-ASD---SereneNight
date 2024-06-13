@@ -30,6 +30,12 @@ public class Communication : MonoBehaviour
             dataCollector.Record("Changing scene: Forest");
             SceneManager.LoadScene("Forest Multiplayer");
         }
+        // else if (card.Equals("Padure") && !SceneManager.GetActiveScene().name.Equals("Forest Multiplayer"))
+        // {
+        //     dataCollector.Record("Changing scene: Forest");
+        //     SceneManager.LoadScene("LowQual Forest");
+        //     realtime.Connect("SereneNight");
+        // }
 
         var options = new Realtime.InstantiateOptions
         {
@@ -37,7 +43,7 @@ public class Communication : MonoBehaviour
             preventOwnershipTakeover = true,
             useInstance = realtime
         };
-
+        
         var pos = Camera.main.transform.position + Camera.main.transform.forward + new Vector3(0, 0.2f, 0);
         var rot = new Quaternion();
         var cardDisplay = Realtime.Instantiate("Prefabs/Card Display", pos, rot, options);

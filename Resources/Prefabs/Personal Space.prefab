@@ -99,7 +99,9 @@ MonoBehaviour:
   _components:
   - componentID: 1
     component: {fileID: 895736260907127889}
-  _childViews: []
+  _childViews:
+  - componentID: 1
+    component: {fileID: 48096434918307313}
 --- !u!114 &895736260907127889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +156,8 @@ GameObject:
   - component: {fileID: 6868503911177919134}
   - component: {fileID: 3049916713558528669}
   - component: {fileID: 8202530690551593594}
+  - component: {fileID: 48096434918307313}
+  - component: {fileID: 2263930749244336829}
   m_Layer: 3
   m_Name: Display Mesh
   m_TagString: Untagged
@@ -226,3 +230,44 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &48096434918307313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8772524372994851566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -363599832, guid: c424820a8880b8845bda10ec0b41507e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _realtime: {fileID: 0}
+  _sceneViewUUID: 
+  _viewUUID: 
+  _sceneViewPreventOwnershipTakeover: 0
+  _sceneViewDestroyWhenOwnerOrLastClientLeaves: 1
+  _sceneViewDestroyWhenOwnerOrLastClientLeavesMigrated: 1
+  _sceneViewDestroyWhenLastClientLeaves: 1
+  _components:
+  - componentID: 1
+    component: {fileID: 2263930749244336829}
+  _childViews: []
+--- !u!114 &2263930749244336829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8772524372994851566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1029778088, guid: c424820a8880b8845bda10ec0b41507e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolate: 1
+  _syncPosition: 1
+  _syncRotation: 1
+  _syncScale: 1
+  _syncVelocity: 1
+  _maintainOwnershipWhileSleeping: 0
