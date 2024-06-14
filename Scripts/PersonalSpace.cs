@@ -88,13 +88,13 @@ public class PersonalSpace : MonoBehaviour
         float distance = Vector3.Distance(playerPos, hitPos);
 
         // Clamp the size
-        if (distance > 5)
+        if (distance > 3.5f)
         {
-            distance = 5;
+            distance = 3.5f;
         }
 
         // Update the personal space
         _personalSpace.radius = distance;
-        _personalSpaceDisplay.transform.localScale = new Vector3(distance * 2, 1, distance * 2);
+        _personalSpaceDisplay.transform.localScale = new Vector3(distance * 2, 0.5f, distance * 2);
     }
 }

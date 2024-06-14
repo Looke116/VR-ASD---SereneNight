@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.31453457, g: 0.55162674, b: 0.82192343, a: 1}
+  m_IndirectSpecularColor: {r: 0.3130029, g: 0.5501603, b: 0.8220557, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -786,11 +786,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4396537163158223977, guid: 9455c043ca0234744ac321338d02c904, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.469
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4396537163158223977, guid: 9455c043ca0234744ac321338d02c904, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.493
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 4396537163158223977, guid: 9455c043ca0234744ac321338d02c904, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19910,7 +19910,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1703568386
 Transform:
   m_ObjectHideFlags: 0
@@ -20633,7 +20633,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.02e-43, y: 0, z: 0, w: -2.5322308e+14}
+  m_BoundingSphereOverride: {x: 4.16e-43, y: 1, z: 1, w: 1}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0

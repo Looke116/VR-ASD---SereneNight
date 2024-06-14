@@ -48,7 +48,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Fill: 0
-    - _Float: 0.229
+    - _Float: 0.6
     - _Fresnel_Effect: 5
     - _Intensity: 2
     - _QueueControl: 0
