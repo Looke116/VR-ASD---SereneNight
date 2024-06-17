@@ -50,7 +50,7 @@ public class XRTime : MonoBehaviour
        	 	elapsedSeconds = 0;
    	 	}
 
-    	double hoursToAdd = (elapsedSeconds / dayDurationInSeconds) * 24;
+    	double hoursToAdd = (elapsedSeconds / dayDurationInSeconds) * 6;
     	DateTime simulatedTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, time, 0, 0).AddHours(hoursToAdd);
 
     	if (simulatedTime.Hour >= timeLimit && simulatedTime.Hour < timeLimit + 1)
