@@ -54,11 +54,14 @@ public class DataCollector : MonoBehaviour
     // Before the application quits format the data points into JSON format and save them to a file
     // If the app is ran on Quest/Android change the function to "OnApplicationPause" instead of "OnApplicationQuit"
     //
-    // private void OnApplicationPause(bool pauseStatus)
-    // {
-    //     if (!pauseStatus) return;
+#if PLATFORM_ANDROID
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (!pauseStatus) return;
+#else
     private void OnApplicationQuit()
     {
+#endif
         _stringBuilder.Append("[");
 
         for (int i = 0; i < _dataPoints.Count; i++)

@@ -161,6 +161,7 @@ GameObject:
   - component: {fileID: 4245964162130795305}
   - component: {fileID: 7615003553813242173}
   - component: {fileID: 7293889323804884628}
+  - component: {fileID: 6559632597593450521}
   m_Layer: 0
   m_Name: Avatar
   m_TagString: Untagged
@@ -209,6 +210,8 @@ MonoBehaviour:
   _components:
   - componentID: 1
     component: {fileID: 7293889323804884628}
+  - componentID: 2
+    component: {fileID: 6559632597593450521}
   _childViews:
   - componentID: 1
     component: {fileID: 7272636954811273914}
@@ -233,6 +236,24 @@ MonoBehaviour:
   _head: {fileID: 5114032748872330269}
   _leftHand: {fileID: 4245964162085256205}
   _rightHand: {fileID: 4245964161447803020}
+--- !u!114 &6559632597593450521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4245964162130795304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1029778088, guid: c424820a8880b8845bda10ec0b41507e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolate: 1
+  _syncPosition: 1
+  _syncRotation: 1
+  _syncScale: 1
+  _syncVelocity: 1
+  _maintainOwnershipWhileSleeping: 0
 --- !u!1 &7140028833099562984
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,9 +794,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 4245964162130795305}
     m_Modifications:
     - target: {fileID: 1867785492264861417, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867785492264861417, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
       propertyPath: controller
       value: 
       objectReference: {fileID: 4245964162085256204}
+    - target: {fileID: 1867785492264861417, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
+      propertyPath: toggleOnOff.m_Reference
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4424716794813391143, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -783,6 +812,22 @@ PrefabInstance:
     - target: {fileID: 4424716794813391143, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
       propertyPath: m_IsLocked
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424716794813391143, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
+      propertyPath: m_AffectRotationX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424716794813391143, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
+      propertyPath: m_AffectRotationY
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424716794813391143, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
+      propertyPath: m_AffectRotationZ
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424716794813391143, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
+      propertyPath: m_IsContraintActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4424716794813391143, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
       propertyPath: m_TranslationAtRest.y
@@ -795,7 +840,7 @@ PrefabInstance:
     - target: {fileID: 4424716794813391143, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
       propertyPath: m_Sources.Array.data[0].sourceTransform
       value: 
-      objectReference: {fileID: 4245964162130795305}
+      objectReference: {fileID: 5114032748872330269}
     - target: {fileID: 4787180079461116144, guid: caeff6c808cc3e2498e34abbec252b51, type: 3}
       propertyPath: m_Name
       value: Personal Space
